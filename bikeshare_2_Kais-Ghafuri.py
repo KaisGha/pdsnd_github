@@ -2,12 +2,14 @@ import time
 import pandas as pd
 import matplotlib.pyplot as plt
 
-pd.set_option('display.max_columns', None) 
-pd.set_option('display.max_rows', None)    
+pd.set_option('display.max_columns', None)
+pd.set_option('display.max_rows', None)
 
 CITY_DATA = { 'chicago': 'chicago.csv',
               'new york city': 'new_york_city.csv',
               'washington': 'washington.csv' }
+              
+# NEW COMMENT for project submission 3B.
 
 def get_filters():
     """
@@ -33,7 +35,7 @@ def get_filters():
 
     # get user input for month (all, january, february, ... , june)
     print('\nWhich month between january to june would you like to explore ? \nOr do want to explore all months (please tip all) ?')
-    
+
     while True:
         month = input('Enter month of the year: ').lower()
         months = ['january', 'february', 'march', 'april', 'may', 'june', 'all']
@@ -42,9 +44,9 @@ def get_filters():
             break
         else:
             print('Sorry, please enter all or months; january to june')
-    
-        # filter by month to create the new dataframe     
-        
+
+        # filter by month to create the new dataframe
+
     # get user input for day of week (all, monday, tuesday, ... sunday)
     print('\nWhich day of the week would you like to explore ?\nOr do want to explore all days ot the week (please tip all) ?')
     day = input('\nEnter day of the week: ').lower()
@@ -66,23 +68,23 @@ def load_data(city, month, day):
         df - Pandas DataFrame containing city data filtered by month and day
     """
     df=pd.read_csv(city)
-    
+
     df['Start Time']= pd.to_datetime(df['Start Time'], errors='coerce')
-    
+
     df['month'] = df['Start Time'].dt.month
-    
+
     df['day_of_week'] = df['Start Time'].dt.day_name()
-    
+
     df['hour'] = df['Start Time'].dt.hour
-    
+
     if month != 'all':
         months = ['january', 'february', 'march', 'april', 'may', 'june']
         month = months.index(month) + 1
 
         # filter by month to create the new dataframe
         df = df[df['month'] == month]
-    
-         
+
+
     if day != 'all':
         # filter by day of week to create the new dataframe
         df = df[df['day_of_week'] == day.title()]
@@ -105,9 +107,9 @@ def time_stats(df):
 
     common_day = df['day_of_week'].mode()[0]
     print('Most common day of week: ', common_day)
-    
+
     # display the most common start hour
-    
+
     common_start_hour = df['hour'].mode()[0]
     print('Most common start hour: ', common_start_hour)
 
@@ -123,16 +125,16 @@ def station_stats(df):
     start_time = time.time()
 
     # display most commonly used start station
-    common_start_station = df['Start Station'].mode()[0]      
-    print( 'Most common start Station: ', common_start_station)                                         #'Start Station', 'End Station    
-    
+    common_start_station = df['Start Station'].mode()[0]
+    print( 'Most common start Station: ', common_start_station)                                         #'Start Station', 'End Station
+
     # display most commonly used end station
-    
-    common_end_station = df['End Station'].mode()[0]      
+
+    common_end_station = df['End Station'].mode()[0]
     print( 'Most common end Station: ', common_end_station)
 
     # display most frequent combination of start station and end station trip
-    
+
     common_combination = df.groupby(['Start Station','End Station']).size().idxmax()
     print( 'Most common frequent combination of start station and end station: ', common_combination)
 
@@ -148,13 +150,13 @@ def trip_duration_stats(df):
     start_time = time.time()
 
     # display total travel time
-    
+
     trip_duration = df['Trip Duration'].sum()
     print('Total trip duration: ', trip_duration)
 
 
     # display mean travel time
-    
+
     mean_travel_time = df['Trip Duration'].mean()
     print('Mean Travel time: ', mean_travel_time)
 
@@ -175,7 +177,7 @@ def user_stats(df):
     print('Counts of User Type: ', user_types)
 
     # Display counts of gender
-    
+
     if 'Gender' in df:
         gender_count = df['Gender'].value_counts()
         print('Total Gender count: ', gender_count)
@@ -184,7 +186,7 @@ def user_stats(df):
 
 
     # Display earliest, most recent, and most common year of birth
-    
+
     if 'Birth Year' in df:
         common_birth_year=df['Birth Year'].mode()[0]
         print('Most common birth year: ', common_birth_year)
@@ -193,11 +195,11 @@ def user_stats(df):
         plt.ylabel('Count customers')
         plt.xlabel('Year of birth')
         plt.show()
-        
+
         #print('This chart shows us the distribution of Birth years our customers',birth_year_count)
     else:
         print('Birth year information is not availabe for this city')
-        
+
 
     print("\nThis took %s seconds." % (time.time() - start_time))
     print('-'*40)
