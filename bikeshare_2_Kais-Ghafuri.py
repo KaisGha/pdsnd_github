@@ -8,8 +8,8 @@ pd.set_option('display.max_rows', None)
 CITY_DATA = { 'chicago': 'chicago.csv',
               'new york city': 'new_york_city.csv',
               'washington': 'washington.csv' }
-              
-# NEW COMMENT for project submission 3B.
+
+# NEW COMMENT for project submisson number 1 of 3
 
 def get_filters():
     """
